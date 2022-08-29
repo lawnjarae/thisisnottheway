@@ -3,6 +3,7 @@ import praw
 from functools import wraps
 from pymongo import MongoClient
 from flask import Flask, request as flask_request, Response as Flask_Response, abort
+from threading import Thread
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -174,16 +175,16 @@ def require_api_key(view_function):
 @app.route('/hot', methods=['POST'])
 @require_api_key
 def hot_endpoint():
-    downvote('hot', ['all'])
+    thread = Thread(target=downvote, args=('hot', ['all'],))
+    thread.start()
     return Flask_Response({}, mimetype='application/json')
 
 
 @app.route('/top', methods=['POST'])
 @require_api_key
 def all_top_endpoint():
-    top_subs = ['all']
-    top_subs.extend(list_of_subs)
-    downvote('top', top_subs)
+    thread = Thread(target=downvote, args=('top', top_subs,))
+    thread.start()
     return Flask_Response({}, mimetype='application/json')
 
 if __name__ == '__main__':
