@@ -183,6 +183,8 @@ def hot_endpoint():
 @app.route('/top', methods=['POST'])
 @require_api_key
 def all_top_endpoint():
+    top_subs = ['all']
+    top_subs.extend(list_of_subs)
     thread = Thread(target=downvote, args=('top', top_subs,))
     thread.start()
     return Flask_Response({}, mimetype='application/json')
