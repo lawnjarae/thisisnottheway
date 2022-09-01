@@ -1,5 +1,6 @@
 import os
 import praw
+from datetime import datetime
 from functools import wraps
 from pymongo import MongoClient
 from flask import Flask, request as flask_request, Response as Flask_Response, abort
@@ -28,7 +29,8 @@ def add_downvote_to_db(comment):
     downvote = {
         'submissionId': comment.submission.id,
         'subreddit': comment.subreddit_name_prefixed,
-        'commentId': comment.id
+        'commentId': comment.id,
+        'datetime': datetime.now()
     }
     db.downvotes.update_one(
         {'_id': comment.author.name},
@@ -37,10 +39,9 @@ def add_downvote_to_db(comment):
     )
 
 list_of_subs = [
-    '321',
     'AdrenalinePorn',
     'Android',
-    'aquaponics',
+    'antiwork',
     'ArtisanVideos',
     'AskReddit',
     'aww',
@@ -90,6 +91,7 @@ list_of_subs = [
     'Spliddit',
     'Stargate',
     'StarWarsleftymemes',
+    'Superstonk',
     'TampaBayLightning',
     'tampabayrays',
     'TeardropTrailers',
@@ -121,7 +123,7 @@ def downvote(type: str, subs: list) -> None:
         print(f'Scanning r/{subreddit.display_name}')
         # Get the n top submissions from that sub
         if sub != 'all':
-            limit = 15
+            limit = 30
         else:
             limit = 100
 
