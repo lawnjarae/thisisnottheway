@@ -98,6 +98,7 @@ list_of_subs = [
     'technology',
     'THE_PACK',
     'TheDollop',
+    'thisistheway',
     'TinyHouses',
     'todayilearned',
     'vandwellers',
