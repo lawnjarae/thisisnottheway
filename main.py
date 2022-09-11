@@ -1,5 +1,6 @@
 import os
 import praw
+import gc
 from datetime import datetime
 from functools import wraps
 from pymongo import MongoClient
@@ -157,6 +158,13 @@ def downvote(type: str, subs: list) -> None:
                         comment.downvote()
                         add_downvote_to_db(comment)
                         num_downvotes = num_downvotes + 1
+                    
+                    del author
+            
+            del all_comments
+
+        del submissions
+        gc.collect()
 
     print(
         f'Scanned {total_comments} comments and downvoted {num_downvotes} for being useless.')
